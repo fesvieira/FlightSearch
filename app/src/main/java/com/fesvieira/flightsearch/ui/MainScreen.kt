@@ -27,13 +27,15 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.fesvieira.flightsearch.model.Airport
 import com.fesvieira.flightsearch.ui.components.AirportListItem
+import com.fesvieira.flightsearch.ui.components.FlightCard
 import com.fesvieira.flightsearch.ui.components.SearchTextField
 import com.fesvieira.flightsearch.ui.theme.FlightSearchTheme
 import com.fesvieira.flightsearch.ui.theme.Typography
 import com.fesvieira.flightsearch.viewmodels.FlightSearchViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class,
+@OptIn(
+    ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class,
     ExperimentalCoroutinesApi::class
 )
 @Composable
@@ -41,6 +43,7 @@ fun MainScreen() {
     val flightSearchViewModel = hiltViewModel<FlightSearchViewModel>()
     val text by flightSearchViewModel.searchQuery.collectAsState()
     val airports by flightSearchViewModel.airportsList.collectAsState()
+    val flights by flightSearchViewModel.flights.collectAsState()
 
     Scaffold(topBar = { AppTopBar() }) { paddingValues ->
         LazyColumn(
@@ -59,10 +62,20 @@ fun MainScreen() {
                 )
             }
 
-            airportsSection(
-                airports = airports,
-                lazyListScope = this
-            )
+            if (airports.isNotEmpty() && flights.isEmpty()) {
+                airportsSection(
+                    airports = airports,
+                    lazyListScope = this,
+                    onAirportClick = { flightSearchViewModel.searchAirportFlights(it) }
+                )
+            }
+
+            if (flights.isNotEmpty()) {
+                flightsSection(
+                    flights = flights,
+                    lazyListScope = this
+                )
+            }
         }
     }
 }
@@ -84,12 +97,27 @@ fun AppTopBar() {
     )
 }
 
-fun airportsSection(
+private fun airportsSection(
     airports: List<Airport>,
-    lazyListScope: LazyListScope
+    lazyListScope: LazyListScope,
+    onAirportClick: (String) -> Unit
 ) {
     lazyListScope.items(airports) { airport ->
-        AirportListItem(airport)
+        AirportListItem(airport, onAirportClick)
+    }
+}
+
+private fun flightsSection(
+    flights: List<Pair<Airport, Airport>>,
+    lazyListScope: LazyListScope
+) {
+    lazyListScope.items(flights) { flight ->
+        FlightCard(
+            isFavorite = false,
+            departAirport = flight.first,
+            arriveAirport = flight.second,
+            modifier = Modifier.padding(bottom = 12.dp)
+        )
     }
 }
 

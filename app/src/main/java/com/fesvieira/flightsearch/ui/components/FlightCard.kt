@@ -33,7 +33,7 @@ fun FlightCard(
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .background(
                 LightGrey, AbsoluteRoundedCornerShape(topRight = 16.dp)
