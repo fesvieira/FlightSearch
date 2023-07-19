@@ -40,7 +40,7 @@ fun FlightCard(
             )
             .padding(16.dp)
     ) {
-        Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Text(text = "DEPART", fontWeight = FontWeight.Medium, fontSize = 12.sp)
             Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                 Text(text = departAirport.iata_code, fontWeight = FontWeight.Bold)
@@ -67,7 +67,7 @@ fun FlightCard(
 @Composable
 fun PreviewFlightCard() {
     FlightCard(
-        isFavorite = false,
+        isFavorite = true,
         departAirport = Airport(1, "AOBA", "Aiport Of British Atlantic", passengers = 2),
             arriveAirport = Airport(1, "AOBA", "Aiport Of British Atlantic", passengers = 2)
     )

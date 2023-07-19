@@ -13,6 +13,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.fesvieira.flightsearch.repository.FlightSearchDatabase
 import com.fesvieira.flightsearch.ui.MainScreen
 import com.fesvieira.flightsearch.ui.theme.FlightSearchTheme
+import com.fesvieira.flightsearch.viewmodels.FlightSearchViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
@@ -29,7 +30,6 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             FlightSearchTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background

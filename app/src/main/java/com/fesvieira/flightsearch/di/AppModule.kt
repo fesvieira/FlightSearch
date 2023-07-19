@@ -21,7 +21,7 @@ object AppModule {
     ) = Room.databaseBuilder(
         context,
         FlightSearchDatabase::class.java,
-        "FLIGHT_TABLE"
+        "flight_search_database"
     ).build()
 
     @Provides

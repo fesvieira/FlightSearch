@@ -20,10 +20,14 @@ import com.fesvieira.flightsearch.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchTextField() {
+fun SearchTextField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    modifier: Modifier = Modifier
+) {
     TextField(
-        value = TextFieldValue(""),
-        onValueChange = {},
+        value = value,
+        onValueChange = onValueChange,
         label = {
             Text(text = "Enter departure airport")
         },
@@ -40,14 +44,12 @@ fun SearchTextField() {
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent
         ),
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
+        modifier = modifier
     )
 }
 
 @Preview
 @Composable
 fun PreviewSearchTextField() {
-    SearchTextField()
+    SearchTextField(value = "", {})
 }
