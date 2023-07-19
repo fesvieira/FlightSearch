@@ -10,11 +10,22 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.fesvieira.flightsearch.repository.FlightSearchDatabase
 import com.fesvieira.flightsearch.ui.theme.FlightSearchTheme
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    @OptIn(DelicateCoroutinesApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        GlobalScope.launch {
+            FlightSearchDatabase.getDatabase(applicationContext).flightSearchDao().getAll()
+        }
+
         setContent {
             FlightSearchTheme {
                 // A surface container using the 'background' color from the theme

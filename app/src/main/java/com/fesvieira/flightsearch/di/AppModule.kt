@@ -4,15 +4,16 @@ import android.content.Context
 import androidx.room.Room
 import com.fesvieira.flightsearch.repository.FlightSearchDao
 import com.fesvieira.flightsearch.repository.FlightSearchDatabase
+import com.fesvieira.flightsearch.repository.FlightSearchRepositoryImpl
 import com.fesvieira.flightsearch.repository.FlightSearchRepository
-import com.fesvieira.flightsearch.repository.FlightSearchService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 
 @Module
-@InstallIn(ApplicationContext::class)
+@InstallIn(SingletonComponent ::class)
 object AppModule {
     @Provides
     fun provideFlightSearchDb(
@@ -31,5 +32,5 @@ object AppModule {
     @Provides
     fun provideFlightSearchRepository(
         flightSearchDao: FlightSearchDao
-    ): FlightSearchService = FlightSearchRepository(flightSearchDao)
+    ): FlightSearchRepository = FlightSearchRepositoryImpl(flightSearchDao)
 }

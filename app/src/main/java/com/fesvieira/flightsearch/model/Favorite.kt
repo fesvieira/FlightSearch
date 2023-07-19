@@ -4,7 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "FAVORITE_LIST")
+@Entity(tableName = "favorite")
 data class Favorite(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
