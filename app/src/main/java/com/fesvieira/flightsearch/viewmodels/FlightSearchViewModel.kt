@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.fesvieira.flightsearch.model.Airport
 import com.fesvieira.flightsearch.repository.FlightSearchRepository
+import com.fesvieira.flightsearch.repository.UserPreferencesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -15,12 +16,14 @@ import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
 @HiltViewModel
 class FlightSearchViewModel @Inject constructor(
-    private val flightSearchRepository: FlightSearchRepository
+    private val flightSearchRepository: FlightSearchRepository,
+    private val userPreferencesRepository: UserPreferencesRepository
 ) : ViewModel() {
     private var _allAirports = emptyList<Airport>()
 
@@ -30,12 +33,19 @@ class FlightSearchViewModel @Inject constructor(
     private val _flights = MutableStateFlow<List<Pair<Airport, Airport>>>(emptyList())
     val flights get() = _flights
 
+    init {
+        viewModelScope.launch {
+            _searchQuery.value = userPreferencesRepository.lastSearch.first()
+        }
+    }
+
     @OptIn(FlowPreview::class)
     val airportsList: StateFlow<List<Airport>> = _searchQuery.debounce(1000).flatMapLatest { query ->
         if (query.isEmpty()) {
             if (_allAirports.isEmpty()) _allAirports = flightSearchRepository.searchAirports(query).first()
             return@flatMapLatest emptyList<List<Airport>>().asFlow()
         }
+        userPreferencesRepository.saveLastSearch(query)
         flightSearchRepository.searchAirports(query)
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
