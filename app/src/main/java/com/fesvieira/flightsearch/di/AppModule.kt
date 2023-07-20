@@ -46,7 +46,6 @@ object AppModule {
     fun provideUserPreferencesRepository(
         @ApplicationContext context: Context,
     ): UserPreferencesRepository {
-        val dataStore = context.dataStore
-        return UserPreferencesRepository(dataStore)
+        return UserPreferencesRepository(context.dataStore)
     }
 }

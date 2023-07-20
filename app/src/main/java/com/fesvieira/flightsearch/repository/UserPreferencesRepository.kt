@@ -14,6 +14,7 @@ class UserPreferencesRepository(
 ) {
     private companion object {
         val LAST_SEARCH = stringPreferencesKey("last_search")
+        val LAST_SELECTED = stringPreferencesKey("last_selected")
     }
 
     val lastSearch: Flow<String> = dataStore.data
@@ -22,9 +23,22 @@ class UserPreferencesRepository(
             preferences[LAST_SEARCH] ?: ""
         }
 
+    val lastSelected: Flow<String?> = dataStore.data
+        .catch { emit(emptyPreferences()) }
+        .map { preferences ->
+            preferences[LAST_SELECTED]
+        }
+
     suspend fun saveLastSearch(string: String) {
         dataStore.edit { preferences ->
             preferences[LAST_SEARCH] = string
+        }
+    }
+
+    suspend fun saveSelectedAirport(iata: String?) {
+        dataStore.edit { preferences ->
+            if (iata == null) preferences.minusAssign(LAST_SELECTED)
+            else preferences[LAST_SELECTED] = iata
         }
     }
 }

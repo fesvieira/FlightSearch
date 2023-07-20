@@ -56,6 +56,7 @@ fun MainScreen() {
                 SearchTextField(
                     value = text,
                     onValueChange = { flightSearchViewModel.searchQuery.value = it },
+                    onClear = { flightSearchViewModel.clearAirport()},
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = 16.dp)

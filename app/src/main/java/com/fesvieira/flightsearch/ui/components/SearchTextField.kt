@@ -1,5 +1,6 @@
 package com.fesvieira.flightsearch.ui.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -23,6 +24,7 @@ import com.fesvieira.flightsearch.R
 fun SearchTextField(
     value: String,
     onValueChange: (String) -> Unit,
+    onClear: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     TextField(
@@ -38,6 +40,17 @@ fun SearchTextField(
                 Modifier.size(24.dp)
             )
         },
+        trailingIcon = {
+            if (value.isNotEmpty()) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_close),
+                    contentDescription = null,
+                    Modifier
+                        .size(24.dp)
+                        .clickable { onClear() }
+                )
+            }
+        },
         shape = RoundedCornerShape(32.dp),
         colors = TextFieldDefaults.textFieldColors(
             containerColor = Color(0xffd5e3ff),
@@ -51,5 +64,5 @@ fun SearchTextField(
 @Preview
 @Composable
 fun PreviewSearchTextField() {
-    SearchTextField(value = "", {})
+    SearchTextField(value = "", {}, {})
 }
